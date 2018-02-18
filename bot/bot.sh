@@ -9,6 +9,7 @@ usage() {
 
 # Compilar el bot
 build() {
+  cd $dir
   make clean
   make
 }
