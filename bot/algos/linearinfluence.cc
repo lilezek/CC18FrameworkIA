@@ -92,7 +92,6 @@ void antInfluence(const Location &ant)
 {
     State &s = State::getSingleton();
     auto &sq = s.getGrid(ant);
-    getDebugger() << ant << " " << sq.ant << std::endl;
     if (sq.ant == 0)
     {
         friendlyAntInfluence(ant);
