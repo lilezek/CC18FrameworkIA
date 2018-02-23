@@ -14,12 +14,13 @@ const std::string actionName = "EXPLORE";
 Explore::Explore(const Location &worker) : Action(worker)
 {
   bestdir = IMPOSSIBLE;
+  calculated = false;
 }
 
 bool Explore::canWork()
 {
-    if (bestdir != IMPOSSIBLE) {
-      return worker.canWalkTo(bestdir);
+    if (calculated) {
+      return bestdir != IMPOSSIBLE && worker.canWalkTo(bestdir);
     }
 
     State &s = State::getSingleton();
@@ -47,6 +48,8 @@ bool Explore::canWork()
             }
         });
     
+
+    calculated = true;    
     if (bestInfluence > WORST_INFLUENCE + 10) {
         Path p = AStar(worker, bestLoc);
         bestdir = p[0].origin;

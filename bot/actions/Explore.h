@@ -16,6 +16,7 @@ public:
   const std::string & actionName() const;
 protected:
   FWDirection bestdir;
+  bool calculated;
 };
 
 #endif

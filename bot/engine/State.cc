@@ -44,17 +44,23 @@ void State::reset()
 //outputs move information to the engine
 void State::makeMove(const Location &loc, int direction)
 {
+    auto & debugger = getDebugger();
     cout << "o " << loc.row << " " << loc.col << " " << CDIRECTIONS[direction] << endl;
 
     Location nLoc = getLocation(loc, direction);
     if (grid[nLoc.row][nLoc.col].ant != -1) {
-        getDebugger() << "crash ant over ant" << endl;
-        getDebugger() << turn << " " << loc << "->" << nLoc << endl;
+        debugger << "crash ant over ant" << endl;
+        debugger << turn << " " << loc << "->" << nLoc << endl;
     }
 
     if (grid[loc.row][loc.col].ant == -1) {
-        getDebugger() << "crash ant not found" << endl;
-        getDebugger() << turn << " " << loc << "->" << nLoc << endl;
+        debugger << "crash ant not found" << endl;
+        debugger << turn << " " << loc << "->" << nLoc << endl;
+    }
+
+    if (direction == IMPOSSIBLE) {
+        debugger << "crash invalid direction" << endl;
+        debugger << turn << " " << loc << "->" << nLoc << endl;
     }
     
     int theAnt = grid[loc.row][loc.col].theAnt;
