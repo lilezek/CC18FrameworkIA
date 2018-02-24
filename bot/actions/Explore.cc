@@ -7,7 +7,7 @@
 #include "../debug.h"
 
 #define WORST_INFLUENCE -999999
-#define INFLUENCE_DISTANCE 30
+#define INFLUENCE_DISTANCE 2
 
 const std::string actionName = "EXPLORE";
 
@@ -37,9 +37,6 @@ bool Explore::canWork()
             else
             {
                 double score = sq.influence;
-                if (sq.isVisible) {
-                  score += 30;
-                }
                 if (bestInfluence < score && l != worker) {
                     bestInfluence = score;
                     bestLoc = l;
