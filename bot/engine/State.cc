@@ -277,6 +277,7 @@ istream& operator>>(istream &is, State &state)
             else if(inputType == "a") //live ant square
             {
                 is >> row >> col >> player;
+                state.noPlayers = max(state.noPlayers, player+1);
                 state.grid[row][col].ant = player;
                 if(player == 0) {
                     state.myAnts.push_back(Location(row, col));                    
