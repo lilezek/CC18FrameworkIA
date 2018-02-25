@@ -39,7 +39,7 @@ struct TemporalState {
 
 int evalState(const TemporalState & local, const vector<Location> & myAnts, const vector<Location> & enemyAnts) {
   State & global = State::getSingleton();
-  
+
   unordered_map<Location, vector<Location>> neighs;
   unordered_map<Location, int> enemies;
 
@@ -53,6 +53,7 @@ int evalState(const TemporalState & local, const vector<Location> & myAnts, cons
         if (it2->second != DEFAULT && 
           it2->second != EMPTY && 
           it1->second != it2->second) {
+          score -= global.distance2(it1->first, it2->first);
           if (global.distance(it1->first, it2->first) <= global.attackradius) {
             auto & v  = neighs[it1->first];
             auto & v2 = neighs[it2->first];
@@ -74,9 +75,9 @@ int evalState(const TemporalState & local, const vector<Location> & myAnts, cons
       } 
     }
     if (dies && local[attack.first] == MYSELF) {
-      score -= 1;
+      score -= 1100;
     } else if (dies) {
-      score += 1;
+      score += 1000;
     }
   }
   return score;
@@ -113,14 +114,14 @@ int recursiveMinimax(const vector<Location> & myAnts,
     return evalState(local, myAnts, enemyAnts);
   }
 
-  int bestValue;
+  int bestValue = max ? -999999999 : 9999999999;
 
   local.state[actualAnt] = (OVERRIDE_STATUS)global.getGrid(actualAnt).ant;
-  actual.push_back(Decision{
+  /*actual.push_back(Decision{
     actualAnt, IMPOSSIBLE
-  });
-  bestValue = recursiveMinimax(myAnts, enemyAnts, ignore, subBest, local, max);
-  actual.pop_back();
+  });*/
+  // bestValue = recursiveMinimax(myAnts, enemyAnts, ignore, subBest, local, max);
+  //actual.pop_back();
 
   for (FWDirection dir: FDIRECTIONS) {
     Location nl(actualAnt, dir);

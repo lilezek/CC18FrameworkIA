@@ -28,6 +28,8 @@ struct State
     */
     int rows, cols,
         turn, turns,
+        visible,
+        fog,
         noPlayers;
 
     bool newWater;
@@ -38,7 +40,7 @@ struct State
     int64_t seed;
 
     std::vector<std::vector<Square> > grid;
-    std::vector<Location> myAnts, enemyAnts, myHills, enemyHills, food;
+    std::vector<Location> myAnts, enemyAnts, myHills, enemyHills, food, newWaters;
 
     Timer timer;
 

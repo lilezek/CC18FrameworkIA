@@ -35,6 +35,9 @@ void State::reset()
     myHills.clear();
     enemyHills.clear();
     food.clear();
+    newWaters.clear();
+    visible = 0;
+    fog = 0;
     for(int row=0; row<rows; row++)
         for(int col=0; col<cols; col++)
             if(!grid[row][col].isWater)
@@ -44,23 +47,17 @@ void State::reset()
 //outputs move information to the engine
 void State::makeMove(const Location &loc, int direction)
 {
-    auto & debugger = getDebugger();
     cout << "o " << loc.row << " " << loc.col << " " << CDIRECTIONS[direction] << endl;
 
     Location nLoc = getLocation(loc, direction);
     if (grid[nLoc.row][nLoc.col].ant != -1) {
-        debugger << "crash ant over ant" << endl;
-        debugger << turn << " " << loc << "->" << nLoc << endl;
+        getDebugger() << "crash ant over ant" << endl;
+        getDebugger() << turn << " " << loc << "->" << nLoc << endl;
     }
 
     if (grid[loc.row][loc.col].ant == -1) {
-        debugger << "crash ant not found" << endl;
-        debugger << turn << " " << loc << "->" << nLoc << endl;
-    }
-
-    if (direction == IMPOSSIBLE) {
-        debugger << "crash invalid direction" << endl;
-        debugger << turn << " " << loc << "->" << nLoc << endl;
+        getDebugger() << "crash ant not found" << endl;
+        getDebugger() << turn << " " << loc << "->" << nLoc << endl;
     }
     
     int theAnt = grid[loc.row][loc.col].theAnt;
@@ -197,7 +194,7 @@ istream& operator>>(istream &is, State &state)
 
     //finds out which turn it is
     while(is >> inputType)
-    {
+    {   
         if(inputType == "end")
         {
             state.gameover = 1;
@@ -265,6 +262,7 @@ istream& operator>>(istream &is, State &state)
                 is >> row >> col;
                 if (!state.grid[row][col].isWater) {
                     state.newWater = true;
+                    state.newWaters.push_back(Location(row, col));
                 }
                 state.grid[row][col].isWater = 1;
             }
@@ -277,6 +275,7 @@ istream& operator>>(istream &is, State &state)
             else if(inputType == "a") //live ant square
             {
                 is >> row >> col >> player;
+                state.noPlayers = max(state.noPlayers, player+1);
                 state.grid[row][col].ant = player;
                 if(player == 0) {
                     state.myAnts.push_back(Location(row, col));                    
@@ -302,7 +301,9 @@ istream& operator>>(istream &is, State &state)
 
             }
             else if(inputType == "players") //player information
+            {
                 is >> state.noPlayers;
+            } 
             else if(inputType == "scores") //score information
             {
                 state.scores = vector<double>(state.noPlayers, 0.0);

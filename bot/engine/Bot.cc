@@ -2,6 +2,7 @@
 #include "../defines.h"
 #include "../debug.h"
 #include "../algos/danger.h"
+#include "../algos/space.h"
 #include "../algos/linearinfluence.h"
 
 using namespace std;
@@ -55,8 +56,25 @@ void Bot::updateAlgorithms()
     {
         foodInfluence(food);
     }
-    getDebugger() << "time taken for updating algorithms: " << state.timer.getTime() << "ms" << endl;
 #endif
+#ifdef CALCULATE_SPACE
+    for (auto & water: state.newWaters) 
+    {
+        calculateSpace(water);
+    }
+#endif
+#ifdef CALCULATE_VISIBLE_AMOUNT
+    for (int r = 0; r < state.rows; r++) {
+        for (int c = 0; c < state.cols; c++) {
+            if (state.grid[r][c].isVisible) {
+                state.visible++;
+            } else {
+                state.fog++;
+            }
+        }
+    }
+#endif
+    getDebugger() << "time taken for updating algorithms: " << state.timer.getTime() << "ms" << endl;
 }
 
 //makes the bots moves for the turn

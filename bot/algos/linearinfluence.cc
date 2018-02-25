@@ -14,7 +14,7 @@ void enemyAntInfluence(const Location &ant)
     {
         if (s.distance(hill, ant) <= s.viewradius)
         {
-            nearBonus = 20;
+            nearBonus = 2000;
         }
     }
 
@@ -61,7 +61,28 @@ void friendlyAntInfluence(const Location &ant)
 
 void friendlyHillInfluence(const Location &hill)
 {
-    // No hacer nada
+    State &s = State::getSingleton();
+    Square &sq = s.getGrid(hill);
+
+    int danger = sq.danger;
+
+    BreadFirstExpansion(hill,
+                        [&s, &hill, danger](const Location &l, int distance) {
+                            Square &sq = s.getGrid(l);
+                            if (sq.isWater || distance >= HELP_RADIUS)
+                            {
+                                return OBSTACLE;
+                            }
+                            else
+                            {
+                                if (danger > 0)
+                                {
+                                    sq.influence += danger * 5;
+                                }
+                                sq.influence += (distance - HELP_RADIUS);
+                                return CONTINUE;
+                            }
+                        });
 }
 
 void enemyHillInfluence(const Location &hill)
@@ -92,6 +113,7 @@ void antInfluence(const Location &ant)
 {
     State &s = State::getSingleton();
     auto &sq = s.getGrid(ant);
+    getDebugger() << ant << " " << sq.ant << std::endl;
     if (sq.ant == 0)
     {
         friendlyAntInfluence(ant);

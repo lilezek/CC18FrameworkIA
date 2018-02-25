@@ -42,8 +42,8 @@ struct Location
 
 	Location(const int *posFromArray)
 	{
-		this->col = posFromArray[0];
-		this->row = posFromArray[1];
+		this->row = posFromArray[0];
+		this->col = posFromArray[1];
 	}
 
 	Location(const int *pos, const int *dir)

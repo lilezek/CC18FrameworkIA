@@ -7,7 +7,7 @@
 #include "../debug.h"
 
 #define WORST_INFLUENCE -999999
-#define INFLUENCE_DISTANCE 2
+#define INFLUENCE_DISTANCE 10
 
 const std::string actionName = "EXPLORE";
 

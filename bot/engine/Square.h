@@ -18,6 +18,7 @@ struct Square
   std::unordered_set<Location> enemyPresence;
   int danger;
   double influence;
+  int space;
 
   Square()
   {
@@ -26,6 +27,7 @@ struct Square
     theAnt = -1;
     influence = danger = 0;
     alreadyMoved = false;
+    space = 8;
   };
 
   /**
